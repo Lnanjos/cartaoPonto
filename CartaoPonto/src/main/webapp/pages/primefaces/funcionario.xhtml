@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Funcionarios</title>
+</h:head>
+<h:body>
+	<p:growl id="mensagem" />
+
+	<h:form id="formListagem">
+		<p:panel header="Funcionarios - Listagem">
+			<p:dataTable id="tabela" emptyMessage="Nenhum registro encontrado."
+				paginator="true" value="#{funcionarioBean.funcionarios}"
+				var="funcionario" rows="5">
+				<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{funcionarioBean.novo}"
+						oncomplete="PF('dialogo').show();"
+						update=":mensagem :formCadastro:painel" />
+				</f:facet>
+
+				<p:column headerText="Nome" filterBy="#{funcionario.nome}"
+					sortBy="#{funcionario.nome}">
+					<h:outputText value="#{funcionario.nome}" />
+				</p:column>
+
+				<p:column headerText="Estado" filterBy="#{funcionario.CPF}">
+					<h:outputText value="#{funcionario.cpf}" />
+				</p:column>
+
+				<p:column headerText="Estado"
+					filterBy="#{funcionario.setor.nomeSetor}"
+					sortBy="#{funcionario.setor.nomeSetor}" >
+					<h:outputText value="#{funcionario.setor.nomeSetor}" />
+				</p:column>
+
+				<p:column headerText="Estado"
+					filterBy="#{funcionario.funcao.nomeFuncao}"
+					sortBy="#{funcionario.setor.nomeFuncao}">
+					<h:outputText value="#{funcionario.funcao.nomeFuncao}" />
+				</p:column>
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						actionListener="#{funcionarioBean.excluir}"
+						update=":mensagem :formListagem:tabela">
+						<p:confirm header="Confirmação"
+							message="Deseja excluir a funcionario" icon="ui-icon-alert" />
+						<f:attribute name="funcionarioSelecionada" value="#{funcionario}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{funcionarioBean.editar}"
+						update=":mensagem :formCadastro:painel"
+						oncomplete="PF('dialogo').show();">
+						<f:attribute name="funcionarioSelecionada" value="#{funcionario}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</p:panel>
+	</h:form>
+
+	<p:dialog header="Funcionarios - Cadastro" widgetVar="dialogo"
+		draggable="false" resizable="false" modal="true" closable="false">
+		<h:form id="formCadastro">
+			<h:panelGrid id="painel" columns="2">
+				<p:outputLabel for="nome" value="Nome:" />
+				<p:inputText id="nome" maxlength="50" size="30" required="true"
+					requiredMessage="O campo nome é obrigatório"
+					value="#{funcionarioBean.funcionario.nome}" />
+
+				<p:outputLabel for="cpf" value="CPF:" />
+				<p:inputMask id="cpf" mask="999.999.999-99"
+					value="#{funcionarioBean.funcionario.cpf}" required="true"
+					requiredMessage="O campo 'CPF' é obrigatório" />
+
+				<p:outputLabel for="funcao" value="Função:" />
+				<p:selectOneMenu id="funcao" filter="true"
+					value="#{funcionarioBean.funcionario.funcao}"
+					converter="omnifaces.SelectItemsConverter">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Selecione uma função" />
+					<f:selectItems value="#{funcionarioBean.funcoes}" var="funcao"
+						itemValue="#{funcao}" itemLabel="#{funcao.nomeFuncao}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel for="setor" value="Setor:" />
+				<p:selectOneMenu id="setor" filter="true"
+					value="#{funcionarioBean.funcionario.setor}"
+					converter="omnifaces.SelectItemsConverter">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Selecione um setor" />
+					<f:selectItems value="#{funcionarioBean.setores}" var="setor"
+						itemValue="#{setor}" itemLabel="#{setor.nomeSetor}" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<p:commandButton value="Salvar"
+					actionListener="#{funcionarioBean.salvar}"
+					update=":mensagem :formCadastro:painel :formListagem:tabela" />
+				<p:commandButton value="Fechar" oncomplete="PF('dialogo').hide();" />
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+</h:body>
+</html>
