@@ -3,28 +3,110 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui" xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:rich="http://richfaces.org/rich">
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Funcões</title>
+	<h:outputStylesheet>
+        .even-row {
+            background-color: #FCFFFE;
+        }
+ 
+        .odd-row {
+            background-color: #ECF3FE;
+        }
+ 
+        .even-row:hover,
+        .odd-row:hover {
+            background-color: #FFEBDA;
+            cursor: pointer;
+        }
+    </h:outputStylesheet>
 </h:head>
 <h:body>
-	<h:form id="formListagem">
+
+	<h:form id="formListagem" style="width: 428px">
 		<rich:panel header="Funções - Listagem">
-			<rich:dataTable id="tabela" noDataLabel="Nenhum registro encontrado"
-				rows="5" value="#{funcaoBean.funcoes}" var="funcao">
-				<rich:column sortBy="#{funcao.nomeFuncao}"
-					filterExpression="#{funcao.nomeFuncao}"
-					filterValue="#{funcao.nomeFuncao}">
+			<rich:extendedDataTable id="tabela" filterVar="filterValue"
+				noDataLabel="Nenhum registro encontrado" rows="5"
+				value="#{funcaoBean.funcoes}" var="funcao" style="width:">
+				<rich:column width="200px" sortBy="#{funcao.nomeFuncao}"
+					filterExpression="#{funcao.nomeFuncao}" filterValue="#{nomeFuncao}">
 					<f:facet name="header">Nome</f:facet>
 					<h:outputText value="#{funcao.nomeFuncao}"></h:outputText>
 				</rich:column>
-				<rich:column>
-					
+				<rich:column width="200px">
+					<f:facet name="header">opções</f:facet>
+					<h:form>
+						<a4j:commandButton id="editar"
+							image="../resources/rich_icons/create_doc.png" execute="@this"
+							oncomplete="#{rich:component('popup')}.show()"
+							render="formsalvar">
+							<f:setPropertyActionListener target="#{funcaoBean.funcao}"
+								value="#{funcao}" />
+							<a4j:actionListener listener="#{funcaoBean.editar}"></a4j:actionListener>
+						</a4j:commandButton>
+
+						<a4j:commandButton id="excluir"
+							image="../resources/rich_icons/cancel.png" execute="@this"
+							render="@none"
+							oncomplete="#{rich:component('confirmPane')}.show()">
+							<f:setPropertyActionListener target="#{funcaoBean.funcao}"
+								value="#{funcao}" />
+						</a4j:commandButton>
+					</h:form>
 				</rich:column>
-			</rich:dataTable>
+				<f:facet name="footer">
+					<rich:dataScroller />
+					<h:form>
+					<a4j:commandButton value="novo" actionListener="#{funcaoBean.novo}">
+						<rich:componentControl target="popup" operation="show" />
+					</a4j:commandButton>
+					</h:form>
+				</f:facet>
+			</rich:extendedDataTable>
 		</rich:panel>
+	</h:form>
+	<rich:popupPanel id="popup" modal="true" resizeable="true"
+		onmaskclick="#{rich:component('popup')}.hide()">
+		<f:facet name="header">
+			<h:outputText value="Nova função" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:outputLink value="#"
+				onclick="#{rich:component('popup')}.hide(); return false;"
+				style="color: inherit">
+                X
+            </h:outputLink>
+		</f:facet>
+		<rich:messages ajaxRendered="true" />
+		<h:form id="formsalvar">
+			<h:outputText for="nome" value="NOME: "></h:outputText>
+			<h:inputText id="nome" required="true"
+				value="#{funcaoBean.funcao.nomeFuncao}" maxlength="50" size="30"
+				requiredMessage="Campo NOME não preenchido">
+				<f:validateLength minimum="5" maximum="20" />
+				<rich:placeholder value="Nome da função" />
+			</h:inputText>
+			<a4j:commandButton id="salvar" execute="@formsalvar nome"
+				render="panel tabela" resetValues="true"
+				actionListener="#{funcaoBean.salvar}">
+			</a4j:commandButton>
+		</h:form>
+	</rich:popupPanel>
+	<h:form>
+		<rich:popupPanel id="confirmPane" autosized="true">
+           Tem certeza de deseja deletar o registro?
+            <a4j:commandButton value="Cancel"
+				onclick="#{rich:component('confirmPane')}.hide(); return false;" />
+			<a4j:commandButton value="Delete" onclick="remove(); return false;" />
+		</rich:popupPanel>
+
+		<a4j:jsFunction name="remove" actionListener="#{funcaoBean.excluir}"
+			render="tabela" execute="@this"
+			oncomplete="#{rich:component('confirmPane')}.hide();" />
 	</h:form>
 </h:body>
 </html>

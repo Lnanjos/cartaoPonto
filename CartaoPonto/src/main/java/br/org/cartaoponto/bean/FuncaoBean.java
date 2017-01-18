@@ -1,6 +1,5 @@
 package br.org.cartaoponto.bean;
 
-
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -8,17 +7,18 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import org.omnifaces.util.Messages;
+import org.richfaces.model.Filter;
 import br.org.cartaoponto.dao.FuncaoDAO;
 import br.org.cartaoponto.domain.Funcao;
 
 @SuppressWarnings("serial")
 @ManagedBean
 @ViewScoped
-public class FuncaoBean implements Serializable {
-	private Funcao funcao;
-
+public class FuncaoBean implements Serializable{
+	private Funcao funcao = new Funcao();
+	
 	private List<Funcao> funcoes;
-
+	
 	public Funcao getFuncao() {
 		return funcao;
 	}
@@ -49,6 +49,7 @@ public class FuncaoBean implements Serializable {
 	public void novo() {
 		try {
 			// metodo que gera um novo objeto
+			System.out.println("novo?");
 			funcao = new Funcao();
 
 		} catch (RuntimeException erro) {
@@ -59,6 +60,7 @@ public class FuncaoBean implements Serializable {
 
 	public void salvar() {
 		try {
+			System.out.println(funcao.getNomeFuncao());
 			FuncaoDAO funcaoDAO = new FuncaoDAO();
 			funcaoDAO.salvar(funcao);
 
@@ -75,9 +77,12 @@ public class FuncaoBean implements Serializable {
 
 	public void excluir(ActionEvent evento) {
 		try {
-			funcao = (Funcao) evento.getComponent().getAttributes()
-					.get("funcaoSelecionada");
-
+			System.out.println("excluir: "+funcao.getNomeFuncao()+" - "+funcao.getCodigo());
+			//funcao = (Funcao) evento.getComponent().getAttributes()
+				//	.get("funcaoSelecionada");
+			
+			System.out.println("excluir: "+funcao.getNomeFuncao()+" - "+funcao.getCodigo());
+			
 			FuncaoDAO funcaoDAO = new FuncaoDAO();
 			funcaoDAO.excluir(funcao);
 
@@ -93,8 +98,9 @@ public class FuncaoBean implements Serializable {
 	public void editar(ActionEvent evento) {
 
 		try {
-			funcao = (Funcao) evento.getComponent().getAttributes()
-					.get("funcaoSelecionada");
+			System.out.println("editar: "+funcao.getNomeFuncao()+" - "+funcao.getCodigo());
+			//funcao = (Funcao) evento.getComponent().getAttributes()
+				//	.get("funcaoSelecionada");
 
 		} catch (RuntimeException erro) {
 			Messages.addGlobalError("Ocorreu um erro ao tentar selecionar uma funcao");
@@ -102,4 +108,18 @@ public class FuncaoBean implements Serializable {
 
 		}
 	}
+	
+	public Filter<?> getNomeFuncaoFilterImpl() {
+        return new Filter<Funcao>() {
+            public boolean accept(Funcao funcao) {
+            	String nomeFuncao = getFuncao().nomeFuncao;
+                if (nomeFuncao == null || nomeFuncao.length() == 0 || nomeFuncao.equals(funcao.getNomeFuncao())) {
+                    return true;
+                }
+                return false;
+            }
+			
+        };
+    }
+
 }

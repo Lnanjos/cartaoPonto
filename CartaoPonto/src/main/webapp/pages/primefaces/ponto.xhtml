@@ -8,7 +8,7 @@
 
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Funcões</title>
+	<title>Pontos</title>
 </h:head>
 <h:body>
 	<p:growl id="mensagem" />
@@ -18,36 +18,40 @@
 	</p:layoutUnit>
 
 	<h:form id="formListagem">
-		<p:panel header="Funcões - Listagem">
+		<p:panel header="Pontos - Listagem">
 			<p:dataTable id="tabela" emptyMessage="Nenhum registro encontrado."
-				paginator="true" value="#{funcaoBean.funcoes}" var="funcao" rows="5">
+				paginator="true" value="#{pontoBean.pontos}" var="ponto" rows="5">
 				<f:facet name="footer">
-					<p:commandButton value="Novo" actionListener="#{funcaoBean.novo}"
+					<p:commandButton value="Novo" actionListener="#{pontoBean.novo}"
 						oncomplete="PF('dialogo').show();"
 						update=":mensagem :formCadastro:painel" />
 				</f:facet>
 
-				<p:column  headerText="Nome" filterBy="#{funcao.nomeFuncao}"
-					sortBy="#{funcao.nomeFuncao}">
-					<h:outputText value="#{funcao.nomeFuncao}" />
+				<p:column  headerText="Nome" filterBy="#{ponto.funcionario.nome}"
+					sortBy="#{ponto.funcionario.nome}">
+					<h:outputText value="#{ponto.funcionario.nome}" />
+				</p:column>
+				
+				<p:column headerText="Data" filterBy="#{ponto.data}" sortBy="#{ponto.data}">
+					<h:outputText value="#{ponto.data}"></h:outputText>
 				</p:column>
 
 				<p:column headerText="Opções">
 					<p:commandButton icon="ui-icon-trash"
-						actionListener="#{funcaoBean.excluir}"
+						actionListener="#{pontoBean.excluir}"
 						update=":mensagem :formListagem:tabela">
-						<p:confirm header="Confirmação" message="Deseja excluir a funcao"
+						<p:confirm header="Confirmação" message="Deseja excluir a ponto"
 							icon="ui-icon-alert" />
-						<f:setPropertyActionListener target="#{funcaoBean.funcao}"
-								value="#{funcao}" />
+						<f:setPropertyActionListener target="#{pontoBean.ponto}"
+								value="#{ponto}" />
 					</p:commandButton>
 
 					<p:commandButton icon="ui-icon-pencil"
-						actionListener="#{funcaoBean.editar}"
+						actionListener="#{pontoBean.editar}"
 						update=":mensagem :formCadastro:painel"
 						oncomplete="PF('dialogo').show();">
-						<f:setPropertyActionListener target="#{funcaoBean.funcao}"
-								value="#{funcao}" />
+						<f:setPropertyActionListener target="#{pontoBean.ponto}"
+								value="#{ponto}" />
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
@@ -61,18 +65,31 @@
 		</p:panel>
 	</h:form>
 
-	<p:dialog header="Funcoes - Cadastro" widgetVar="dialogo"
+	<p:dialog header="Pontos - Cadastro" widgetVar="dialogo"
 		draggable="false" resizable="false" modal="true" closable="false">
 		<h:form id="formCadastro">
 			<h:panelGrid id="painel" columns="2">
-				<p:outputLabel value="Nome:" />
-				<p:inputText maxlength="50" size="30"
-					value="#{funcaoBean.funcao.nomeFuncao}" />
+				<p:outputLabel value="Data:" />
+				<p:calendar id="data"
+					value="#{pontoBean.data}" >
+					<f:convertDateTime locale="pt_BR" />
+				</p:calendar>
+					
+				<p:outputLabel value="Funcionario:" for="funcionario"/>
+				<p:selectOneMenu id="funcionario" filter="true" value="#{pontoBean.funcionario.nome}"
+					converter="omnifaces.SelectItemsConverter"
+					required="true" requiredMessage="Campo estado Obrigatório!">
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione um funcionario" />
+					
+					<f:selectItems value="#{pontoBean.funcionarios}" var="funcionario"
+						itemValue="#{funcionario}" itemLabel="#{funcionario.nome} - #{funcionario.cpf}" />
+				</p:selectOneMenu>
+				
 			</h:panelGrid>
 
 			<h:panelGrid columns="2">
 				<p:commandButton value="Salvar"
-					actionListener="#{funcaoBean.salvar}"
+					actionListener="#{pontoBean.salvar}"
 					update=":mensagem :formCadastro:painel :formListagem:tabela" />
 				<p:commandButton value="Fechar" oncomplete="PF('dialogo').hide();" />
 			</h:panelGrid>

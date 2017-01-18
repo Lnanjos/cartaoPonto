@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--  casting componentes -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>SIG</title>
+</h:head>
+<h:body>
+
+	<h:form style="margin-right:0px">
+	
+		<!-- Implementação do menu -->
+		<!-- Para mudar para a horizontal usa o menubar -->
+		<p:menubar toggleable="true"> 
+			<p:submenu label="Sistema">
+			<!-- Insere um item no menu criado anteriomente-->
+				
+				<p:menuitem value="Sair" />
+				<!-- Inserção de item dentro do submenu -->
+			</p:submenu>
+			<p:submenu label="Cadastros">
+				<p:menuitem value="Funções" url="/pages/primefaces/funcao.xhtml" />
+				
+				<p:menuitem value="Funcionarios" url="/pages/primefaces/funcionario.xhtml" />
+				
+				<p:menuitem value="ponto" url="/pages/primefaces/ponto.xhtml" />
+				
+				<p:menuitem value="Setor" url="/pages/primefaces/setor.xhtml" />
+
+			</p:submenu>
+
+			<p:submenu label="Administração">
+				<p:menuitem value="Administradores" url="/pages/primefaces/administrador.xhtml" />
+			</p:submenu>
+			
+		</p:menubar>
+	</h:form>
+</h:body>
+</html>

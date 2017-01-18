@@ -3,116 +3,110 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Funcionarios</title>
+	<title>Funcões</title>
+	<h:outputStylesheet>
+        .even-row {
+            background-color: #FCFFFE;
+        }
+ 
+        .odd-row {
+            background-color: #ECF3FE;
+        }
+ 
+        .even-row:hover,
+        .odd-row:hover {
+            background-color: #FFEBDA;
+            cursor: pointer;
+        }
+    </h:outputStylesheet>
 </h:head>
 <h:body>
-	<p:growl id="mensagem" />
 
-	<h:form id="formListagem">
-		<p:panel header="Funcionarios - Listagem">
-			<p:dataTable id="tabela" emptyMessage="Nenhum registro encontrado."
-				paginator="true" value="#{funcionarioBean.funcionarios}"
-				var="funcionario" rows="5">
+	<h:form id="formListagem" style="width: 428px">
+		<rich:panel header="Funções - Listagem">
+			<rich:extendedDataTable id="tabela" filterVar="filterValue"
+				noDataLabel="Nenhum registro encontrado" rows="5"
+				value="#{funcionarioBean.funcionarios}" var="funcionario" style="width:">
+				<rich:column width="200px" sortBy="#{funcionario.nomeFuncionario}"
+					filterExpression="#{funcionario.nomeFuncionario}" filterValue="#{nomeFuncionario}">
+					<f:facet name="header">Nome</f:facet>
+					<h:outputText value="#{funcionario.nome}"></h:outputText>
+				</rich:column>
+				<rich:column width="200px">
+					<f:facet name="header">opções</f:facet>
+					<h:form>
+						<a4j:commandButton id="editar"
+							image="../resources/rich_icons/create_doc.png" execute="@this"
+							oncomplete="#{rich:component('popup')}.show()"
+							render="formsalvar">
+							<f:setPropertyActionListener target="#{funcionarioBean.funcionario}"
+								value="#{funcionario}" />
+							<a4j:actionListener listener="#{funcionarioBean.editar}"></a4j:actionListener>
+						</a4j:commandButton>
+
+						<a4j:commandButton id="excluir"
+							image="../resources/rich_icons/cancel.png" execute="@this"
+							render="@none"
+							oncomplete="#{rich:component('confirmPane')}.show()">
+							<f:setPropertyActionListener target="#{funcionarioBean.funcionario}"
+								value="#{funcionario}" />
+						</a4j:commandButton>
+					</h:form>
+				</rich:column>
 				<f:facet name="footer">
-					<p:commandButton value="Novo"
-						actionListener="#{funcionarioBean.novo}"
-						oncomplete="PF('dialogo').show();"
-						update=":mensagem :formCadastro:painel" />
+					<rich:dataScroller />
+					<h:form>
+					<a4j:commandButton value="novo" actionListener="#{funcionarioBean.novo}">
+						<rich:componentControl target="popup" operation="show" />
+					</a4j:commandButton>
+					</h:form>
 				</f:facet>
-
-				<p:column headerText="Nome" filterBy="#{funcionario.nome}"
-					sortBy="#{funcionario.nome}">
-					<h:outputText value="#{funcionario.nome}" />
-				</p:column>
-
-				<p:column headerText="Estado" filterBy="#{funcionario.CPF}">
-					<h:outputText value="#{funcionario.cpf}" />
-				</p:column>
-
-				<p:column headerText="Estado"
-					filterBy="#{funcionario.setor.nomeSetor}"
-					sortBy="#{funcionario.setor.nomeSetor}" >
-					<h:outputText value="#{funcionario.setor.nomeSetor}" />
-				</p:column>
-
-				<p:column headerText="Estado"
-					filterBy="#{funcionario.funcao.nomeFuncao}"
-					sortBy="#{funcionario.setor.nomeFuncao}">
-					<h:outputText value="#{funcionario.funcao.nomeFuncao}" />
-				</p:column>
-
-				<p:column headerText="Opções">
-					<p:commandButton icon="ui-icon-trash"
-						actionListener="#{funcionarioBean.excluir}"
-						update=":mensagem :formListagem:tabela">
-						<p:confirm header="Confirmação"
-							message="Deseja excluir a funcionario" icon="ui-icon-alert" />
-						<f:attribute name="funcionarioSelecionada" value="#{funcionario}" />
-					</p:commandButton>
-
-					<p:commandButton icon="ui-icon-pencil"
-						actionListener="#{funcionarioBean.editar}"
-						update=":mensagem :formCadastro:painel"
-						oncomplete="PF('dialogo').show();">
-						<f:attribute name="funcionarioSelecionada" value="#{funcionario}" />
-					</p:commandButton>
-				</p:column>
-			</p:dataTable>
-
-			<p:confirmDialog global="true">
-				<p:commandButton value="Sim" type="button"
-					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-				<p:commandButton value="Não" type="button"
-					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-			</p:confirmDialog>
-		</p:panel>
+			</rich:extendedDataTable>
+		</rich:panel>
 	</h:form>
-
-	<p:dialog header="Funcionarios - Cadastro" widgetVar="dialogo"
-		draggable="false" resizable="false" modal="true" closable="false">
-		<h:form id="formCadastro">
-			<h:panelGrid id="painel" columns="2">
-				<p:outputLabel for="nome" value="Nome:" />
-				<p:inputText id="nome" maxlength="50" size="30" required="true"
-					requiredMessage="O campo nome é obrigatório"
-					value="#{funcionarioBean.funcionario.nome}" />
-
-				<p:outputLabel for="cpf" value="CPF:" />
-				<p:inputMask id="cpf" mask="999.999.999-99"
-					value="#{funcionarioBean.funcionario.cpf}" required="true"
-					requiredMessage="O campo 'CPF' é obrigatório" />
-
-				<p:outputLabel for="funcao" value="Função:" />
-				<p:selectOneMenu id="funcao" filter="true"
-					value="#{funcionarioBean.funcionario.funcao}"
-					converter="omnifaces.SelectItemsConverter">
-					<f:selectItem noSelectionOption="true"
-						itemLabel="Selecione uma função" />
-					<f:selectItems value="#{funcionarioBean.funcoes}" var="funcao"
-						itemValue="#{funcao}" itemLabel="#{funcao.nomeFuncao}" />
-				</p:selectOneMenu>
-
-				<p:outputLabel for="setor" value="Setor:" />
-				<p:selectOneMenu id="setor" filter="true"
-					value="#{funcionarioBean.funcionario.setor}"
-					converter="omnifaces.SelectItemsConverter">
-					<f:selectItem noSelectionOption="true"
-						itemLabel="Selecione um setor" />
-					<f:selectItems value="#{funcionarioBean.setores}" var="setor"
-						itemValue="#{setor}" itemLabel="#{setor.nomeSetor}" />
-				</p:selectOneMenu>
-			</h:panelGrid>
-
-			<h:panelGrid columns="2">
-				<p:commandButton value="Salvar"
-					actionListener="#{funcionarioBean.salvar}"
-					update=":mensagem :formCadastro:painel :formListagem:tabela" />
-				<p:commandButton value="Fechar" oncomplete="PF('dialogo').hide();" />
-			</h:panelGrid>
+	<rich:popupPanel id="popup" modal="true" resizeable="true"
+		onmaskclick="#{rich:component('popup')}.hide()">
+		<f:facet name="header">
+			<h:outputText value="Nova função" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:outputLink value="#"
+				onclick="#{rich:component('popup')}.hide(); return false;"
+				style="color: inherit">
+                X
+            </h:outputLink>
+		</f:facet>
+		<rich:messages ajaxRendered="true" />
+		<h:form id="formsalvar">
+			<h:outputText for="nome" value="NOME: "></h:outputText>
+			<h:inputText id="nome" required="true"
+				value="#{funcionarioBean.funcionario.nome}" maxlength="50" size="30"
+				requiredMessage="Campo NOME não preenchido">
+				<f:validateLength minimum="5" maximum="20" />
+				<rich:placeholder value="Nome da função" />
+			</h:inputText>
+			<a4j:commandButton id="salvar" execute="@formsalvar nome"
+				render="panel tabela" resetValues="true"
+				actionListener="#{funcionarioBean.salvar}">
+			</a4j:commandButton>
 		</h:form>
-	</p:dialog>
+	</rich:popupPanel>
+	<h:form>
+		<rich:popupPanel id="confirmPane" autosized="true">
+           Tem certeza de deseja deletar o registro?
+            <a4j:commandButton value="Cancel"
+				onclick="#{rich:component('confirmPane')}.hide(); return false;" />
+			<a4j:commandButton value="Delete" onclick="remove(); return false;" />
+		</rich:popupPanel>
+
+		<a4j:jsFunction name="remove" actionListener="#{funcionarioBean.excluir}"
+			render="tabela" execute="@this"
+			oncomplete="#{rich:component('confirmPane')}.hide();" />
+	</h:form>
 </h:body>
 </html>

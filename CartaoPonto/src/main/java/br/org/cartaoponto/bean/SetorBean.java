@@ -74,8 +74,8 @@ public class SetorBean implements Serializable {
 
 	public void excluir(ActionEvent evento) {
 		try {
-			setor = (Setor) evento.getComponent().getAttributes()
-					.get("setorSelecionada");
+			//setor = (Setor) evento.getComponent().getAttributes()
+				//	.get("setorSelecionada");
 
 			SetorDAO setorDAO = new SetorDAO();
 			setorDAO.excluir(setor);
@@ -92,8 +92,8 @@ public class SetorBean implements Serializable {
 	public void editar(ActionEvent evento) {
 
 		try {
-			setor = (Setor) evento.getComponent().getAttributes()
-					.get("setorSelecionada");
+			//setor = (Setor) evento.getComponent().getAttributes()
+				//	.get("setorSelecionada");
 
 		} catch (RuntimeException erro) {
 			Messages.addGlobalError("Ocorreu um erro ao tentar selecionar uma setor");

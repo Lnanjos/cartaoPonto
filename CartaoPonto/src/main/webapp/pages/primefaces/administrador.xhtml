@@ -5,49 +5,51 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Funcões</title>
+	<title>Administradores</title>
 </h:head>
 <h:body>
 	<p:growl id="mensagem" />
-	
+
 	<p:layoutUnit>
 		<ui:include src="../template/menu.xhtml"></ui:include>
 	</p:layoutUnit>
 
 	<h:form id="formListagem">
-		<p:panel header="Funcões - Listagem">
+		<p:panel header="Administradors - Listagem">
 			<p:dataTable id="tabela" emptyMessage="Nenhum registro encontrado."
-				paginator="true" value="#{funcaoBean.funcoes}" var="funcao" rows="5">
+				paginator="true" value="#{administradorBean.administradores}"
+				var="administrador" rows="5">
 				<f:facet name="footer">
-					<p:commandButton value="Novo" actionListener="#{funcaoBean.novo}"
+					<p:commandButton value="Novo"
+						actionListener="#{administradorBean.novo}"
 						oncomplete="PF('dialogo').show();"
 						update=":mensagem :formCadastro:painel" />
 				</f:facet>
 
-				<p:column  headerText="Nome" filterBy="#{funcao.nomeFuncao}"
-					sortBy="#{funcao.nomeFuncao}">
-					<h:outputText value="#{funcao.nomeFuncao}" />
+				<p:column headerText="Nome" filterBy="#{administrador.nome}"
+					sortBy="#{administrador.nome}">
+					<h:outputText value="#{administrador.nome}" />
 				</p:column>
+
 
 				<p:column headerText="Opções">
 					<p:commandButton icon="ui-icon-trash"
-						actionListener="#{funcaoBean.excluir}"
+						actionListener="#{administradorBean.excluir}"
 						update=":mensagem :formListagem:tabela">
-						<p:confirm header="Confirmação" message="Deseja excluir a funcao"
-							icon="ui-icon-alert" />
-						<f:setPropertyActionListener target="#{funcaoBean.funcao}"
-								value="#{funcao}" />
+						<p:confirm header="Confirmação"
+							message="Deseja excluir a administrador" icon="ui-icon-alert" />
+						<f:setPropertyActionListener target="#{administradorBean.administrador}"
+								value="#{administrador}" />
 					</p:commandButton>
 
 					<p:commandButton icon="ui-icon-pencil"
-						actionListener="#{funcaoBean.editar}"
+						actionListener="#{administradorBean.editar}"
 						update=":mensagem :formCadastro:painel"
 						oncomplete="PF('dialogo').show();">
-						<f:setPropertyActionListener target="#{funcaoBean.funcao}"
-								value="#{funcao}" />
+						<f:setPropertyActionListener target="#{administradorBean.administrador}"
+								value="#{administrador}" />
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
@@ -61,18 +63,33 @@
 		</p:panel>
 	</h:form>
 
-	<p:dialog header="Funcoes - Cadastro" widgetVar="dialogo"
+	<p:dialog header="Administradors - Cadastro" widgetVar="dialogo"
 		draggable="false" resizable="false" modal="true" closable="false">
 		<h:form id="formCadastro">
-			<h:panelGrid id="painel" columns="2">
-				<p:outputLabel value="Nome:" />
-				<p:inputText maxlength="50" size="30"
-					value="#{funcaoBean.funcao.nomeFuncao}" />
+			<h:panelGrid id="painel">
+				<p:outputLabel for="setor" value="Setor:" />
+				<p:selectOneMenu id="setor" filter="true"
+					value="#{administradorBean.administrador.funcionario}"
+					converter="omnifaces.SelectItemsConverter">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Selecione um funcionario" />
+					<f:selectItems value="#{administradorBean.funcionarios}"
+						var="funcionario" itemValue="#{funcionario}"
+						itemLabel="#{funcionario.nome}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel for="senha" value="Senha:" />
+				<p:password id="senha" maxlength="8" size="10"
+					value="#{administradorBean.administrador.senha}" required="true"
+					requiredMessage="O campo 'Código' é obrigatório"
+					validatorMessage="Informe uma senha de 6 a 8 caracteres">
+					<f:validateLength minimum="6" maximum="8" />
+				</p:password>
 			</h:panelGrid>
 
 			<h:panelGrid columns="2">
 				<p:commandButton value="Salvar"
-					actionListener="#{funcaoBean.salvar}"
+					actionListener="#{administradorBean.salvar}"
 					update=":mensagem :formCadastro:painel :formListagem:tabela" />
 				<p:commandButton value="Fechar" oncomplete="PF('dialogo').hide();" />
 			</h:panelGrid>

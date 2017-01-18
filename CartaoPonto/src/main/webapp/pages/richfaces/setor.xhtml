@@ -3,72 +3,110 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Setores</title>
+	<h:outputStylesheet>
+        .even-row {
+            background-color: #FCFFFE;
+        }
+ 
+        .odd-row {
+            background-color: #ECF3FE;
+        }
+ 
+        .even-row:hover,
+        .odd-row:hover {
+            background-color: #FFEBDA;
+            cursor: pointer;
+        }
+    </h:outputStylesheet>
 </h:head>
 <h:body>
-	<p:growl id="mensagem" />
 
-	<h:form id="formListagem">
-		<p:panel header="Setores - Listagem">
-			<p:dataTable id="tabela" emptyMessage="Nenhum registro encontrado."
-				paginator="true" value="#{setorBean.setors}" var="setor" rows="5">
+	<h:form id="formListagem" style="width: 428px">
+		<rich:panel header="Setores - Listagem">
+			<rich:extendedDataTable id="tabela" filterVar="filterValue"
+				noDataLabel="Nenhum registro encontrado" rows="5"
+				value="#{setorBean.setors}" var="setor" style="width:">
+				<rich:column width="200px" sortBy="#{setor.nomeSetor}"
+					filterExpression="#{setor.nomeSetor}" filterValue="#{nomeSetor}">
+					<f:facet name="header">Nome</f:facet>
+					<h:outputText value="#{setor.nome}"></h:outputText>
+				</rich:column>
+				<rich:column width="200px">
+					<f:facet name="header">opções</f:facet>
+					<h:form>
+						<a4j:commandButton id="editar"
+							image="../resources/rich_icons/create_doc.png" execute="@this"
+							oncomplete="#{rich:component('popup')}.show()"
+							render="formsalvar">
+							<f:setPropertyActionListener target="#{setorBean.setor}"
+								value="#{setor}" />
+							<a4j:actionListener listener="#{setorBean.editar}"></a4j:actionListener>
+						</a4j:commandButton>
+
+						<a4j:commandButton id="excluir"
+							image="../resources/rich_icons/cancel.png" execute="@this"
+							render="@none"
+							oncomplete="#{rich:component('confirmPane')}.show()">
+							<f:setPropertyActionListener target="#{setorBean.setor}"
+								value="#{setor}" />
+						</a4j:commandButton>
+					</h:form>
+				</rich:column>
 				<f:facet name="footer">
-					<p:commandButton value="Novo" actionListener="#{setorBean.novo}"
-						oncomplete="PF('dialogo').show();"
-						update=":mensagem :formCadastro:painel" />
+					<rich:dataScroller />
+					<h:form>
+					<a4j:commandButton value="novo" actionListener="#{setorBean.novo}">
+						<rich:componentControl target="popup" operation="show" />
+					</a4j:commandButton>
+					</h:form>
 				</f:facet>
-
-				<p:column headerText="Nome" filterBy="#{setor.nomeSetor}"
-					sortBy="#{setor.nomeSetor}">
-					<h:outputText value="#{setor.nomeSetor}" />
-				</p:column>
-
-				<p:column headerText="Opções">
-					<p:commandButton icon="ui-icon-trash"
-						actionListener="#{setorBean.excluir}"
-						update=":mensagem :formListagem:tabela">
-						<p:confirm header="Confirmação" message="Deseja excluir a setor"
-							icon="ui-icon-alert" />
-						<f:attribute name="setorSelecionada" value="#{setor}" />
-					</p:commandButton>
-
-					<p:commandButton icon="ui-icon-pencil"
-						actionListener="#{setorBean.editar}"
-						update=":mensagem :formCadastro:painel"
-						oncomplete="PF('dialogo').show();">
-						<f:attribute name="setorSelecionada" value="#{setor}" />
-					</p:commandButton>
-				</p:column>
-			</p:dataTable>
-
-			<p:confirmDialog global="true">
-				<p:commandButton value="Sim" type="button"
-					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-				<p:commandButton value="Não" type="button"
-					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-			</p:confirmDialog>
-		</p:panel>
+			</rich:extendedDataTable>
+		</rich:panel>
 	</h:form>
-
-	<p:dialog header="Setores - Cadastro" widgetVar="dialogo"
-		draggable="false" resizable="false" modal="true" closable="false">
-		<h:form id="formCadastro">
-			<h:panelGrid id="painel" columns="2">
-				<p:outputLabel value="Nome:" />
-				<p:inputText maxlength="50" size="30"
-					value="#{setorBean.setor.nomeSetor}" />
-			</h:panelGrid>
-
-			<h:panelGrid columns="2">
-				<p:commandButton value="Salvar"
-					actionListener="#{setorBean.salvar}"
-					update=":mensagem :formCadastro:painel :formListagem:tabela" />
-				<p:commandButton value="Fechar" oncomplete="PF('dialogo').hide();" />
-			</h:panelGrid>
+	<rich:popupPanel id="popup" modal="true" resizeable="true"
+		onmaskclick="#{rich:component('popup')}.hide()">
+		<f:facet name="header">
+			<h:outputText value="Nova função" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:outputLink value="#"
+				onclick="#{rich:component('popup')}.hide(); return false;"
+				style="color: inherit">
+                X
+            </h:outputLink>
+		</f:facet>
+		<rich:messages ajaxRendered="true" />
+		<h:form id="formsalvar">
+			<h:outputText for="nome" value="NOME: "></h:outputText>
+			<h:inputText id="nome" required="true"
+				value="#{setorBean.setor.nomeSetor}" maxlength="50" size="30"
+				requiredMessage="Campo NOME não preenchido">
+				<f:validateLength minimum="5" maximum="20" />
+				<rich:placeholder value="Nome da função" />
+			</h:inputText>
+			<a4j:commandButton id="salvar" execute="@formsalvar nome"
+				render="panel tabela" resetValues="true"
+				actionListener="#{setorBean.salvar}">
+			</a4j:commandButton>
 		</h:form>
-	</p:dialog>
+	</rich:popupPanel>
+	<h:form>
+		<rich:popupPanel id="confirmPane" autosized="true">
+           Tem certeza de deseja deletar o registro?
+            <a4j:commandButton value="Cancel"
+				onclick="#{rich:component('confirmPane')}.hide(); return false;" />
+			<a4j:commandButton value="Delete" onclick="remove(); return false;" />
+		</rich:popupPanel>
+
+		<a4j:jsFunction name="remove" actionListener="#{setorBean.excluir}"
+			render="tabela" execute="@this"
+			oncomplete="#{rich:component('confirmPane')}.hide();" />
+	</h:form>
 </h:body>
 </html>

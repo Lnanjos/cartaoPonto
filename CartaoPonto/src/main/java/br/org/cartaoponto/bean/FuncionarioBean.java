@@ -116,8 +116,8 @@ public class FuncionarioBean implements Serializable {
 
 	public void excluir(ActionEvent evento) {
 		try {
-			funcionario = (Funcionario) evento.getComponent().getAttributes()
-					.get("funcionarioSelecionada");
+			//funcionario = (Funcionario) evento.getComponent().getAttributes()
+				//	.get("funcionarioSelecionada");
 
 			FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 			funcionarioDAO.excluir(funcionario);
@@ -134,8 +134,8 @@ public class FuncionarioBean implements Serializable {
 	public void editar(ActionEvent evento) {
 
 		try {
-			funcionario = (Funcionario) evento.getComponent().getAttributes()
-					.get("funcionarioSelecionada");
+			//funcionario = (Funcionario) evento.getComponent().getAttributes()
+				//	.get("funcionarioSelecionada");
 
 			FuncaoDAO funcaoDAO = new FuncaoDAO();
 			funcoes = funcaoDAO.listar();

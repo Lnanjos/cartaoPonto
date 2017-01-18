@@ -76,7 +76,7 @@
 			<artifactId>primefaces</artifactId>
 			<version>6.0</version>
 		</dependency>
-
+		
 		<!-- Framework MVC -->
 		<dependency>
 			<groupId>org.glassfish</groupId>
@@ -88,9 +88,9 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>5.3</version>
+			<version>6.0</version>
 		</dependency>
-
+		
 		<!-- Temas do PrimeFaces -->
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>
@@ -121,5 +121,8 @@
 			<artifactId>omnifaces</artifactId>
 			<version>1.11</version>
 		</dependency>
+		
+		
+		
 	</dependencies>
 </project>
