@@ -5,7 +5,8 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich"
-	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Setores</title>
@@ -26,7 +27,9 @@
     </h:outputStylesheet>
 </h:head>
 <h:body>
-
+	<rich:panel>
+		<ui:include src="../template/menuRich.xhtml"></ui:include>
+	</rich:panel>
 	<h:form id="formListagem" style="width: 428px">
 		<rich:panel header="Setores - Listagem">
 			<rich:extendedDataTable id="tabela" filterVar="filterValue"
@@ -35,7 +38,7 @@
 				<rich:column width="200px" sortBy="#{setor.nomeSetor}"
 					filterExpression="#{setor.nomeSetor}" filterValue="#{nomeSetor}">
 					<f:facet name="header">Nome</f:facet>
-					<h:outputText value="#{setor.nome}"></h:outputText>
+					<h:outputText value="#{setor.nomeSetor}"></h:outputText>
 				</rich:column>
 				<rich:column width="200px">
 					<f:facet name="header">opções</f:facet>

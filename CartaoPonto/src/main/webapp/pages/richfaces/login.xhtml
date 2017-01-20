@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Autenticação</title>
+	<script type="text/javascript"
+		src="../jsf/resources/jquery.maskedinput-1.2.1.js"></script>
+</h:head>
+<h:body>
+	<rich:popupPanel id="popup" modal="true" resizeable="true" show="true">
+		<f:facet name="header">
+			<h:outputText value="Registro de ponto" />
+		</f:facet>
+		<rich:messages ajaxRendered="true" />
+		<h:form id="formsalvar">
+			<h:panelGrid columns="2">
+				<h:outputText for="login" value="login: "></h:outputText>
+				<h:inputText id="login"
+					value="#{administradorBean.administrador.login}" maxlength="15"
+					size="15" required="true" onBlur="Validarlogin(form1.login);"
+					onKeyPress="Mascaralogin(form1.login);">
+				</h:inputText>
+				<h:outputText for="senha" value="senha: "></h:outputText>
+				<h:inputSecret id="senha"
+					value="#{administradorBean.administrador.senha}" required="true"
+					requiredMessage="Insira o código" maxlength="8" size="15"></h:inputSecret>
+				<a4j:commandButton id="entrar" execute="@this login senha" render="formsalvar">
+					<f:setPropertyActionListener
+						target="#{administradorBean.link}" value="richfaces" />
+					<a4j:actionListener listener="#{administradorBean.autenticar}"></a4j:actionListener>
+				</a4j:commandButton>
+			</h:panelGrid>
+		</h:form>
+	</rich:popupPanel>
+</h:body>
+</html>

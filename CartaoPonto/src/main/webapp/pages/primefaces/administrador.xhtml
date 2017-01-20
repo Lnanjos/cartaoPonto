@@ -23,14 +23,13 @@
 				var="administrador" rows="5">
 				<f:facet name="footer">
 					<p:commandButton value="Novo"
-						actionListener="#{administradorBean.novo}"
 						oncomplete="PF('dialogo').show();"
 						update=":mensagem :formCadastro:painel" />
 				</f:facet>
 
-				<p:column headerText="Nome" filterBy="#{administrador.nome}"
-					sortBy="#{administrador.nome}">
-					<h:outputText value="#{administrador.nome}" />
+				<p:column headerText="Nome" filterBy="#{administrador.funcionario.nome}"
+					sortBy="#{administrador.funcionario.nome}">
+					<h:outputText value="#{administrador.funcionario.nome}" />
 				</p:column>
 
 
@@ -77,7 +76,15 @@
 						var="funcionario" itemValue="#{funcionario}"
 						itemLabel="#{funcionario.nome}" />
 				</p:selectOneMenu>
-
+				
+				<p:outputLabel for="login" value="Login:" />
+				<p:inputText id="login" maxlength="8" size="10"
+					value="#{administradorBean.administrador.login}" required="true"
+					requiredMessage="O campo 'login' é obrigatório"
+					validatorMessage="Informe um login válido caracteres">
+					<f:validateLength minimum="6" maximum="15" />
+				</p:inputText>
+				
 				<p:outputLabel for="senha" value="Senha:" />
 				<p:password id="senha" maxlength="8" size="10"
 					value="#{administradorBean.administrador.senha}" required="true"

@@ -5,7 +5,8 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich"
-	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Funcões</title>
@@ -26,7 +27,9 @@
     </h:outputStylesheet>
 </h:head>
 <h:body>
-
+	<rich:panel>
+		<ui:include src="../template/menuRich.xhtml"></ui:include>
+	</rich:panel>
 	<h:form id="formListagem" style="width: 428px">
 		<rich:panel header="Funções - Listagem">
 			<rich:extendedDataTable id="tabela" filterVar="filterValue"

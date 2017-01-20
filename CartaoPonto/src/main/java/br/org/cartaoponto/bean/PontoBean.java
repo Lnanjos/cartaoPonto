@@ -1,7 +1,10 @@
 package br.org.cartaoponto.bean;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import org.omnifaces.util.Messages;
 import br.org.cartaoponto.dao.FuncionarioDAO;
@@ -9,9 +12,12 @@ import br.org.cartaoponto.dao.PontoDAO;
 import br.org.cartaoponto.domain.Funcionario;
 import br.org.cartaoponto.domain.Ponto;
 
-public class PontoBean {
+@SuppressWarnings("serial")
+@ManagedBean
+@ViewScoped
+public class PontoBean implements Serializable{
 	
-	private Ponto ponto;
+	private Ponto ponto = new Ponto();
 
 	private List<Ponto> pontos;
 	
@@ -69,15 +75,17 @@ public class PontoBean {
 
 	public void salvar() {
 		try {
+			System.out.println(ponto.getData());
 			PontoDAO pontoDAO = new PontoDAO();
 			pontoDAO.salvar(ponto);
 
+			Messages.addGlobalInfo("Ponto salvo com sucesso"
+					+ ponto.getFuncionario().getNome()+" - "+ ponto.getData());
+			
+			
 			ponto = new Ponto();
 
 			pontos = pontoDAO.listar();
-
-			Messages.addGlobalInfo("Ponto salvo com sucesso"
-					+ ponto.getFuncionario().getNome()+" - "+ ponto.getData());
 		} catch (RuntimeException erro) {
 			Messages.addFlashGlobalError("Ocorreu um erro ao tentar salvar uma nova ponto");
 			erro.printStackTrace();

@@ -15,7 +15,7 @@
 		<property name="connection.password">root</property>
 
 		<!-- Pool de Conexões -->
-		<property name="connection.pool_size">1</property><!-- define numero de usuarios -->
+		<property name="connection.pool_size">-1</property><!-- define numero de usuarios -->
 
 		<!-- SQL dialect -->
 		<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>

@@ -71,12 +71,11 @@
 			<h:panelGrid id="painel" columns="2">
 				<p:outputLabel value="Data:" />
 				<p:calendar id="data"
-					value="#{pontoBean.data}" >
-					<f:convertDateTime locale="pt_BR" />
+					value="#{pontoBean.ponto.data}"  pattern="dd/MM/yyyy HH:mm:ss" 	>
 				</p:calendar>
 					
 				<p:outputLabel value="Funcionario:" for="funcionario"/>
-				<p:selectOneMenu id="funcionario" filter="true" value="#{pontoBean.funcionario.nome}"
+				<p:selectOneMenu id="funcionario" filter="true" value="#{pontoBean.ponto.funcionario}"
 					converter="omnifaces.SelectItemsConverter"
 					required="true" requiredMessage="Campo estado Obrigatório!">
 					<f:selectItem noSelectionOption="true" itemLabel="Selecione um funcionario" />

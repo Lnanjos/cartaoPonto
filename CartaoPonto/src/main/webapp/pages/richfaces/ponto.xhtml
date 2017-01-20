@@ -9,7 +9,7 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Funcões</title>
+	<title>Pontos</title>
 	<h:outputStylesheet>
         .even-row {
             background-color: #FCFFFE;
@@ -30,15 +30,21 @@
 	<rich:panel>
 		<ui:include src="../template/menuRich.xhtml"></ui:include>
 	</rich:panel>
-	<h:form id="formListagem" style="width: 428px">
-		<rich:panel header="Funções - Listagem">
+	<h:form id="formListagem" style="width: 629px">
+		<rich:panel header="Pontos - Listagem">
 			<rich:extendedDataTable id="tabela" filterVar="filterValue"
 				noDataLabel="Nenhum registro encontrado" rows="5"
-				value="#{funcionarioBean.funcionarios}" var="funcionario" style="width:">
-				<rich:column width="200px" sortBy="#{funcionario.nomeFuncionario}"
-					filterExpression="#{funcionario.nomeFuncionario}" filterValue="#{nomeFuncionario}">
+				value="#{pontoBean.pontos}" var="ponto" style="width:">
+				<rich:column width="200px" sortBy="#{ponto.funcionario.nome}"
+					filterExpression="#{ponto.funcionario.nome}"
+					filterValue="#{ponto.funcionario.nome}">
 					<f:facet name="header">Nome</f:facet>
-					<h:outputText value="#{funcionario.nome}"></h:outputText>
+					<h:outputText value="#{ponto.funcionario.nome}"></h:outputText>
+				</rich:column>
+				<rich:column width="200px" sortBy="#{ponto.data}"
+					filterExpression="#{ponto.data}" filterValue="#{ponto.data}">
+					<f:facet name="header">Data</f:facet>
+					<h:outputText value="#{ponto.data}"></h:outputText>
 				</rich:column>
 				<rich:column width="200px">
 					<f:facet name="header">opções</f:facet>
@@ -47,26 +53,26 @@
 							image="../resources/rich_icons/create_doc.png" execute="@this"
 							oncomplete="#{rich:component('popup')}.show()"
 							render="formsalvar">
-							<f:setPropertyActionListener target="#{funcionarioBean.funcionario}"
-								value="#{funcionario}" />
-							<a4j:actionListener listener="#{funcionarioBean.editar}"></a4j:actionListener>
+							<f:setPropertyActionListener target="#{pontoBean.ponto}"
+								value="#{ponto}" />
+							<a4j:actionListener listener="#{pontoBean.editar}"></a4j:actionListener>
 						</a4j:commandButton>
 
 						<a4j:commandButton id="excluir"
 							image="../resources/rich_icons/cancel.png" execute="@this"
 							render="@none"
 							oncomplete="#{rich:component('confirmPane')}.show()">
-							<f:setPropertyActionListener target="#{funcionarioBean.funcionario}"
-								value="#{funcionario}" />
+							<f:setPropertyActionListener target="#{pontoBean.ponto}"
+								value="#{ponto}" />
 						</a4j:commandButton>
 					</h:form>
 				</rich:column>
 				<f:facet name="footer">
 					<rich:dataScroller />
 					<h:form>
-					<a4j:commandButton value="novo" actionListener="#{funcionarioBean.novo}">
-						<rich:componentControl target="popup" operation="show" />
-					</a4j:commandButton>
+						<a4j:commandButton value="novo" actionListener="#{pontoBean.novo}">
+							<rich:componentControl target="popup" operation="show" />
+						</a4j:commandButton>
 					</h:form>
 				</f:facet>
 			</rich:extendedDataTable>
@@ -75,7 +81,7 @@
 	<rich:popupPanel id="popup" modal="true" resizeable="true"
 		onmaskclick="#{rich:component('popup')}.hide()">
 		<f:facet name="header">
-			<h:outputText value="Nova função" />
+			<h:outputText value="Novo Ponto" />
 		</f:facet>
 		<f:facet name="controls">
 			<h:outputLink value="#"
@@ -86,17 +92,26 @@
 		</f:facet>
 		<rich:messages ajaxRendered="true" />
 		<h:form id="formsalvar">
-			<h:outputText for="nome" value="NOME: "></h:outputText>
-			<h:inputText id="nome" required="true"
-				value="#{funcionarioBean.funcionario.nome}" maxlength="50" size="30"
-				requiredMessage="Campo NOME não preenchido">
-				<f:validateLength minimum="5" maximum="20" />
-				<rich:placeholder value="Nome da função" />
-			</h:inputText>
-			<a4j:commandButton id="salvar" execute="@formsalvar nome"
-				render="panel tabela" resetValues="true"
-				actionListener="#{funcionarioBean.salvar}">
-			</a4j:commandButton>
+			<h:panelGrid columns="2">
+				<h:outputText for="data" value="DATA: "></h:outputText>
+				<rich:calendar value="#{pontoBean.ponto.data}" id="data"
+					locale="pt/BR" popup="true" datePattern="dd/MM/yyyy HH:mm"
+					showApplyButton="#{calendarBean.showApply}" style="width:200px">
+				</rich:calendar>
+				<h:outputText for="nome" value="NOME: "></h:outputText>
+				<rich:select id="nome" enableManualInput="true"
+					defaultLabel="Nome do funcionario" required="true" minChars="1"
+					requiredMessage="funcionario invalido"
+					value="#{pontoBean.ponto.funcionario}" converter="omnifaces.SelectItemsConverter">
+					<f:selectItems value="#{pontoBean.funcionarios}" var="funcionario"
+						itemValue="#{funcionario}"
+						itemLabel="#{funcionario.nome} - #{funcionario.cpf}" />
+				</rich:select>
+				<a4j:commandButton id="salvar" execute="@formsalvar nome data"
+					render="panel tabela" resetValues="true"
+					actionListener="#{pontoBean.salvar}">
+				</a4j:commandButton>
+			</h:panelGrid>
 		</h:form>
 	</rich:popupPanel>
 	<h:form>
@@ -107,7 +122,7 @@
 			<a4j:commandButton value="Delete" onclick="remove(); return false;" />
 		</rich:popupPanel>
 
-		<a4j:jsFunction name="remove" actionListener="#{funcionarioBean.excluir}"
+		<a4j:jsFunction name="remove" actionListener="#{pontoBean.excluir}"
 			render="tabela" execute="@this"
 			oncomplete="#{rich:component('confirmPane')}.hide();" />
 	</h:form>

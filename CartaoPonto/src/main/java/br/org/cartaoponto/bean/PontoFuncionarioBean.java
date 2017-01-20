@@ -37,6 +37,7 @@ public class PontoFuncionarioBean implements Serializable{
 
 	public void autenticar() {
 		try {
+			System.out.println("cpf: "+funcionario.getCpf()+" senha: "+funcionario.getCodigoFuncionario());
 			FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 			funcionarioLogado = funcionarioDAO.autenticar(funcionario.getCpf(),
 					funcionario.getCodigoFuncionario());
