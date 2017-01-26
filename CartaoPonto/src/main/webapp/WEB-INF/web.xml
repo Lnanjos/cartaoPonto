@@ -23,8 +23,8 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
-	
-	
+
+
 
 	<!-- Especifica o tema que será utilizado -->
 	<context-param>
@@ -41,22 +41,29 @@
 		<param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
 		<param-value>true</param-value>
 	</context-param>
-	
+
 	<!-- mudando o tema do richfaces -->
 	<context-param>
 		<param-name>org.richfaces.skin</param-name>
-		<param-value>ruby</param-value>
+		<param-value>blueSky</param-value>
 	</context-param>
 
 	<context-param>
 		<param-name>org.richfaces.CONTROL_SKINNING</param-name>
 		<param-value>enable</param-value>
 	</context-param>
-	
-	<!-- tema bootsfaces -->
+
+	<!-- tema bootsfaces <context-param> <param-name>BootsFaces_USETHEME</param-name> 
+		<param-value>cerulean</param-value> </context-param> -->
+
 	<context-param>
-		<param-name>BootsFaces_USETHEME</param-name>
-		<param-value>cerulean</param-value>
+		<param-name>org.icefaces.ace.theme</param-name>
+		<param-value>cupertino</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>com.icesoft.faces.connectionTimeout</param-name>
+		<param-value>10000000</param-value>
 	</context-param>
 
 </web-app>

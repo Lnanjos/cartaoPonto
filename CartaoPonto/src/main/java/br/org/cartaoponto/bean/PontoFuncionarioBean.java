@@ -46,7 +46,7 @@ public class PontoFuncionarioBean implements Serializable{
 				Messages.addGlobalError("CPF e/ou senha incorretos");
 				return;
 			}
-				
+			funcionario = new Funcionario();
 		} catch (Exception erro) {
 			erro.printStackTrace();
 			Messages.addGlobalError(erro.getMessage());

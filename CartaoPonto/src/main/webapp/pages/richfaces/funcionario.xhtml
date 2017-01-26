@@ -34,9 +34,10 @@
 		<rich:panel header="Funções - Listagem">
 			<rich:extendedDataTable id="tabela" filterVar="filterValue"
 				noDataLabel="Nenhum registro encontrado" rows="5"
-				value="#{funcionarioBean.funcionarios}" var="funcionario" style="width:">
-				<rich:column width="200px" sortBy="#{funcionario.nomeFuncionario}"
-					filterExpression="#{funcionario.nomeFuncionario}" filterValue="#{nomeFuncionario}">
+				value="#{funcionarioBean.funcionarios}" var="funcionario"
+				style="width:">
+				<rich:column width="200px" sortBy="#{funcionario.nome}"
+					filterExpression="#{funcionario.nome}" filterValue="#{nome}">
 					<f:facet name="header">Nome</f:facet>
 					<h:outputText value="#{funcionario.nome}"></h:outputText>
 				</rich:column>
@@ -47,8 +48,8 @@
 							image="../resources/rich_icons/create_doc.png" execute="@this"
 							oncomplete="#{rich:component('popup')}.show()"
 							render="formsalvar">
-							<f:setPropertyActionListener target="#{funcionarioBean.funcionario}"
-								value="#{funcionario}" />
+							<f:setPropertyActionListener
+								target="#{funcionarioBean.funcionario}" value="#{funcionario}" />
 							<a4j:actionListener listener="#{funcionarioBean.editar}"></a4j:actionListener>
 						</a4j:commandButton>
 
@@ -56,17 +57,20 @@
 							image="../resources/rich_icons/cancel.png" execute="@this"
 							render="@none"
 							oncomplete="#{rich:component('confirmPane')}.show()">
-							<f:setPropertyActionListener target="#{funcionarioBean.funcionario}"
-								value="#{funcionario}" />
+							<f:setPropertyActionListener
+								target="#{funcionarioBean.funcionario}" value="#{funcionario}" />
 						</a4j:commandButton>
 					</h:form>
 				</rich:column>
 				<f:facet name="footer">
 					<rich:dataScroller />
 					<h:form>
-					<a4j:commandButton value="novo" actionListener="#{funcionarioBean.novo}">
-						<rich:componentControl target="popup" operation="show" />
-					</a4j:commandButton>
+						<a4j:commandButton value="novo"
+							actionListener="#{funcionarioBean.novo}"
+							oncomplete="#{rich:component('popup')}.show(); return false;"
+							render="popup">
+						</a4j:commandButton>
+						</a4j:commandButton>
 					</h:form>
 				</f:facet>
 			</rich:extendedDataTable>
@@ -86,14 +90,50 @@
 		</f:facet>
 		<rich:messages ajaxRendered="true" />
 		<h:form id="formsalvar">
-			<h:outputText for="nome" value="NOME: "></h:outputText>
-			<h:inputText id="nome" required="true"
-				value="#{funcionarioBean.funcionario.nome}" maxlength="50" size="30"
-				requiredMessage="Campo NOME não preenchido">
-				<f:validateLength minimum="5" maximum="20" />
-				<rich:placeholder value="Nome da função" />
-			</h:inputText>
-			<a4j:commandButton id="salvar" execute="@formsalvar nome"
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Setor: "></h:outputLabel>
+				<rich:select label="Setor:  " required="true"
+					requiredMessage="por favor preencha todos os campos" id="setor"
+					value="#{funcionarioBean.funcionario.setor}"
+					converter="omnifaces.SelectItemsConverter" requiredIndicator="(*)">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Selecione um setor" />
+					<f:selectItems value="#{funcionarioBean.setores}" var="setor"
+						itemValue="#{setor}" itemLabel="#{setor.nomeSetor}" />
+				</rich:select>
+
+				<h:outputLabel value="Função "></h:outputLabel>
+				<rich:select label="Funcão:  " required="true"
+					requiredMessage="por favor preencha todos os campos" id="funcao"
+					value="#{funcionarioBean.funcionario.funcao}"
+					converter="omnifaces.SelectItemsConverter" requiredIndicator="(*)">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Selecione uma função" />
+					<f:selectItems value="#{funcionarioBean.funcoes}" var="funcao"
+						itemValue="#{funcao}" itemLabel="#{funcao.nomeFuncao}" />
+				</rich:select>
+				<h:outputText for="nome" value="NOME: "></h:outputText>
+				<h:inputText id="nome" required="true"
+					value="#{funcionarioBean.funcionario.nome}" maxlength="50"
+					size="30" requiredMessage="Campo NOME não preenchido">
+					<f:validateLength minimum="5" maximum="20" />
+					<rich:placeholder value="Nome do funcionario" />
+				</h:inputText>
+				<h:outputLabel for="cpf" value="CPF:" />
+				<h:inputText id="cpf" value="#{funcionarioBean.funcionario.cpf}"
+					maxlength="14" size="15" required="true">
+				</h:inputText>
+				<h:outputText for="senha" value="Senha: "></h:outputText>
+				<h:inputSecret id="senha" required="true"
+					value="#{funcionarioBean.funcionario.codigoFuncionario}"
+					maxlength="8" size="30"
+					requiredMessage="Campo senha não preenchido">
+					<f:validateLength minimum="6" maximum="8" />
+					<rich:placeholder value="senha" />
+				</h:inputSecret>
+			</h:panelGrid>
+			<a4j:commandButton id="salvar"
+				execute="@formsalvar funcao setor nome senha cpf"
 				render="panel tabela" resetValues="true"
 				actionListener="#{funcionarioBean.salvar}">
 			</a4j:commandButton>
@@ -107,9 +147,9 @@
 			<a4j:commandButton value="Delete" onclick="remove(); return false;" />
 		</rich:popupPanel>
 
-		<a4j:jsFunction name="remove" actionListener="#{funcionarioBean.excluir}"
-			render="tabela" execute="@this"
-			oncomplete="#{rich:component('confirmPane')}.hide();" />
+		<a4j:jsFunction name="remove"
+			actionListener="#{funcionarioBean.excluir}" render="tabela"
+			execute="@this" oncomplete="#{rich:component('confirmPane')}.hide();" />
 	</h:form>
 </h:body>
 </html>

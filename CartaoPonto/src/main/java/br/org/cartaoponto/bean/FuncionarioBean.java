@@ -21,7 +21,7 @@ import br.org.cartaoponto.domain.Setor;
 @ManagedBean
 @ViewScoped
 public class FuncionarioBean implements Serializable {
-	private Funcionario funcionario;
+	private Funcionario funcionario = new Funcionario();
 
 	private List<Funcionario> funcionarios;
 	private List<Funcao> funcoes;
@@ -72,6 +72,12 @@ public class FuncionarioBean implements Serializable {
 		try {
 			FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 			funcionarios = funcionarioDAO.listar();
+			
+			SetorDAO setorDAO = new SetorDAO();
+			setores = setorDAO.listar();
+			
+			FuncaoDAO funcaoDAO = new FuncaoDAO();
+			funcoes = funcaoDAO.listar();
 		} catch (RuntimeException erro) {
 			Messages.addFlashGlobalError("Ocorreu um erro ao tentar listar as funcionarios");
 			erro.printStackTrace();

@@ -70,8 +70,9 @@
 				<f:facet name="footer">
 					<rich:dataScroller />
 					<h:form>
-						<a4j:commandButton value="novo" actionListener="#{pontoBean.novo}">
-							<rich:componentControl target="popup" operation="show" />
+						<a4j:commandButton value="novo" actionListener="#{pontoBean.novo}"
+							oncomplete="#{rich:component('popup')}.show(); return false;"
+							render="popup">
 						</a4j:commandButton>
 					</h:form>
 				</f:facet>
@@ -102,7 +103,8 @@
 				<rich:select id="nome" enableManualInput="true"
 					defaultLabel="Nome do funcionario" required="true" minChars="1"
 					requiredMessage="funcionario invalido"
-					value="#{pontoBean.ponto.funcionario}" converter="omnifaces.SelectItemsConverter">
+					value="#{pontoBean.ponto.funcionario}"
+					converter="omnifaces.SelectItemsConverter">
 					<f:selectItems value="#{pontoBean.funcionarios}" var="funcionario"
 						itemValue="#{funcionario}"
 						itemLabel="#{funcionario.nome} - #{funcionario.cpf}" />

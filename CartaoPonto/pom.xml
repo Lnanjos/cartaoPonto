@@ -14,6 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+
 	<!-- Parâmetros de execução -->
 	<build>
 		<!-- Nome do projeto empacotado -->
@@ -38,7 +39,22 @@
 				<version>2.2</version>
 			</plugin>
 		</plugins>
+
 	</build>
+
+	<repositories>
+
+		<repository>
+			<id>org.openfaces</id>
+			<url>http://repository.openfaces.org/repository</url>
+		</repository>
+		<repository>
+			<id>jfree</id>
+			<url>http://www.ibiblio.org/maven/jfree/</url>
+		</repository>
+
+	</repositories>
+
 
 	<!-- Dependências -->
 	<dependencies>
@@ -76,21 +92,8 @@
 			<artifactId>primefaces</artifactId>
 			<version>6.0</version>
 		</dependency>
-		
-		<!-- Framework MVC -->
-		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.faces</artifactId>
-			<version>2.2.10</version>
-		</dependency>
 
-		<!-- Framework de Componentes -->
-		<dependency>
-			<groupId>org.primefaces</groupId>
-			<artifactId>primefaces</artifactId>
-			<version>6.0</version>
-		</dependency>
-		
+
 		<!-- Temas do PrimeFaces -->
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>
@@ -106,13 +109,8 @@
 			<version>4.5.17.Final</version>
 		</dependency>
 
-		<!-- BootsFaces -->
-		<dependency>
-			<groupId>net.bootsfaces</groupId>
-			<artifactId>bootsfaces</artifactId>
-			<version>0.9.1</version>
-			<scope>compile</scope>
-		</dependency>
+		<!-- BootsFaces <dependency> <groupId>net.bootsfaces</groupId> <artifactId>bootsfaces</artifactId> 
+			<version>0.9.1</version> <scope>compile</scope> </dependency> -->
 
 
 		<!-- OmniFaces -->
@@ -121,8 +119,10 @@
 			<artifactId>omnifaces</artifactId>
 			<version>1.11</version>
 		</dependency>
-		
-		
-		
+
+
+
+
+
 	</dependencies>
 </project>

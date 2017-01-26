@@ -64,9 +64,11 @@
 				<f:facet name="footer">
 					<rich:dataScroller />
 					<h:form>
-					<a4j:commandButton value="novo" actionListener="#{funcaoBean.novo}">
-						<rich:componentControl target="popup" operation="show" />
-					</a4j:commandButton>
+						<a4j:commandButton value="novo"
+							actionListener="#{funcaoBean.novo}"
+							oncomplete="#{rich:component('popup')}.show(); return false;"
+							render="popup">
+						</a4j:commandButton>
 					</h:form>
 				</f:facet>
 			</rich:extendedDataTable>

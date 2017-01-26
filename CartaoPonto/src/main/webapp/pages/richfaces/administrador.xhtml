@@ -76,8 +76,9 @@
 					<rich:dataScroller />
 					<h:form>
 						<a4j:commandButton value="novo"
-							actionListener="#{administradorBean.novo}">
-							<rich:componentControl target="popup" operation="show" />
+							actionListener="#{administradorBean.novo}"
+							oncomplete="#{rich:component('popup')}.show(); return false;"
+							render="popup">
 						</a4j:commandButton>
 					</h:form>
 				</f:facet>
